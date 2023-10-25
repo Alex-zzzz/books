@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BookMapperImpl implements BookMapper {
-    private BookDto dto = new BookDto();
 
     @Override
     public BookDto toDto(Book book) {
+        BookDto dto = new BookDto();
         dto.setId(book.getId());
         dto.setIsbn(book.getIsbn());
         dto.setPrice(book.getPrice());
