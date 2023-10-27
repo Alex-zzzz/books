@@ -5,11 +5,17 @@ import lombok.RequiredArgsConstructor;
 import online.book.store.dto.BookDto;
 import online.book.store.dto.CreateBookRequestDto;
 import online.book.store.exception.EntityNotFoundException;
+import online.book.store.model.Book;
 import online.book.store.service.BookService;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -23,13 +29,29 @@ public class BookController {
         return bookService.findAll();
     }
 
-    @GetMapping(value = "/books/id")
-    public BookDto getBookById(Long id) throws EntityNotFoundException {
-        return bookService.getBookById(id);
+    @GetMapping(value = "/{id}")
+    public Book getBookById(@PathVariable Long id) {
+        return bookService.getBookById(id).get();
     }
 
     @PostMapping
     public BookDto createBook(@RequestBody CreateBookRequestDto bookDto) {
         return bookService.save(bookDto);
+    }
+
+    @PutMapping("/{id}")
+    public Book updateBookById(@PathVariable Long id, @RequestBody Book book) {
+        try {
+            return bookService.updateBook(id, book);
+        } catch (Exception e) {
+            new EntityNotFoundException("can`t found book id :" + id);
+        }
+        return book;
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        bookService.delete(id);
     }
 }
