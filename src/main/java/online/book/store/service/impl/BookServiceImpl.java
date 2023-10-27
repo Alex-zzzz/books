@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import online.book.store.dto.BookDto;
 import online.book.store.dto.CreateBookRequestDto;
+import online.book.store.exception.EntityNotFoundException;
 import online.book.store.mapper.BookMapper;
 import online.book.store.model.Book;
 import online.book.store.repository.BookRepository;
@@ -32,25 +33,20 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book getBookById(Long id) {
-        return bookRepository.findById(id).orElseThrow();
+    public Book getBookById(Long id) throws EntityNotFoundException {
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Can`t found entity by id: " + id));
     }
 
     @Override
-    public Book updateBook(Long id, Book book) {
-        Book bookToUpdate = bookRepository.findById(id).get();
-        bookToUpdate.setTitle(book.getTitle());
-        bookToUpdate.setAuthor(book.getAuthor());
-        bookToUpdate.setCoverImage(book.getCoverImage());
-        bookToUpdate.setIsbn(book.getIsbn());
-        bookToUpdate.setDescription(book.getDescription());
-        bookToUpdate.setPrice(book.getPrice());
-        bookRepository.save(bookToUpdate);
-        return bookToUpdate;
+    public BookDto updateBook(Long id, CreateBookRequestDto requestDto) {
+        Book book = bookMapper.toModel(requestDto);
+        book.setId(id);
+        return bookMapper.toDto(bookRepository.save(book));
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws EntityNotFoundException {
         bookRepository.delete(getBookById(id));
     }
 }
