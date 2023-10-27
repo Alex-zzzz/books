@@ -4,7 +4,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import online.book.store.dto.BookDto;
 import online.book.store.dto.CreateBookRequestDto;
-import online.book.store.exception.EntityNotFoundException;
 import online.book.store.model.Book;
 import online.book.store.service.BookService;
 import org.springframework.http.HttpStatus;
@@ -41,7 +40,7 @@ public class BookController {
 
     @PutMapping("/{id}")
     public Book updateBookById(@PathVariable Long id, @RequestBody Book book) {
-            return bookService.updateBook(id, book);
+        return bookService.updateBook(id, book);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
