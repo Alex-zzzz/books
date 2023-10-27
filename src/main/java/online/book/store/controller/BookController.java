@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import online.book.store.dto.BookDto;
 import online.book.store.dto.CreateBookRequestDto;
+import online.book.store.exception.EntityNotFoundException;
 import online.book.store.model.Book;
 import online.book.store.service.BookService;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class BookController {
     }
 
     @GetMapping(value = "/{id}")
-    public Book getBookById(@PathVariable Long id) {
+    public Book getBookById(@PathVariable Long id) throws EntityNotFoundException {
         return bookService.getBookById(id);
     }
 
@@ -39,13 +40,14 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public Book updateBookById(@PathVariable Long id, @RequestBody Book book) {
-        return bookService.updateBook(id, book);
+    public BookDto updateBookById(@PathVariable Long id,
+                                  @RequestBody CreateBookRequestDto bookDto) {
+        return bookService.updateBook(id, bookDto);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) throws EntityNotFoundException {
         bookService.delete(id);
     }
 }
