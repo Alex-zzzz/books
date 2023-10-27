@@ -31,7 +31,7 @@ public class BookController {
 
     @GetMapping(value = "/{id}")
     public Book getBookById(@PathVariable Long id) {
-        return bookService.getBookById(id).get();
+        return bookService.getBookById(id);
     }
 
     @PostMapping
@@ -41,12 +41,7 @@ public class BookController {
 
     @PutMapping("/{id}")
     public Book updateBookById(@PathVariable Long id, @RequestBody Book book) {
-        try {
             return bookService.updateBook(id, book);
-        } catch (Exception e) {
-            new EntityNotFoundException("can`t found book id :" + id);
-        }
-        return book;
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
