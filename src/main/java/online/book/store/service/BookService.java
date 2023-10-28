@@ -4,7 +4,9 @@ import java.util.List;
 import online.book.store.dto.BookDto;
 import online.book.store.dto.CreateBookRequestDto;
 import online.book.store.exception.EntityNotFoundException;
+import online.book.store.model.Book;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 public interface BookService {
@@ -12,5 +14,9 @@ public interface BookService {
 
     List<BookDto> findAll();
 
-    BookDto getBookById(Long id) throws EntityNotFoundException;
+    Book getBookById(Long id) throws EntityNotFoundException;
+
+    BookDto updateBook(Long id, CreateBookRequestDto bookDto);
+
+    void delete(@PathVariable Long id) throws EntityNotFoundException;
 }
