@@ -35,7 +35,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book getBookById(Long id) throws EntityNotFoundException {
         return bookRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Can`t found entity by id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Can`t find book by id: " + id));
     }
 
     @Override
