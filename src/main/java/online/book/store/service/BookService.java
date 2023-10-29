@@ -5,6 +5,7 @@ import online.book.store.dto.BookDto;
 import online.book.store.dto.CreateBookRequestDto;
 import online.book.store.exception.EntityNotFoundException;
 import online.book.store.model.Book;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface BookService {
     BookDto save(CreateBookRequestDto requestDto);
 
-    List<BookDto> findAll();
+    List<BookDto> findAll(Pageable pageable);
 
     Book getBookById(Long id) throws EntityNotFoundException;
 
