@@ -34,3 +34,4 @@ public class AuthController {
         return authenticationService.authenticate(request);
     }
 }
+

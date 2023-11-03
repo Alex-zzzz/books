@@ -14,5 +14,5 @@ public class UserResponseDto {
     private String shippingAddress;
     private boolean isDeleted;
     private Set<Role> roles;
-
 }
+
