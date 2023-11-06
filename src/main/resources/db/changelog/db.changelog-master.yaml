@@ -6,4 +6,4 @@ databaseChangeLog:
     - include:
         file: db/changelog/changes/03-create-table-role.yaml
     - include:
-          db/changelog/changes/04-create-table-users-roles.yaml
+        file: db/changelog/changes/04-create-table-users-roles.yaml
