@@ -1,9 +1,9 @@
 package online.book.store.controller;
 
-import java.util.List;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import online.book.store.dto.BookDto;
 import online.book.store.dto.CreateBookRequestDto;
@@ -66,5 +66,4 @@ public class BookController {
                                   @RequestBody CreateBookRequestDto requestDto) {
         return bookService.updateBookById(id, requestDto);
     }
-
 }

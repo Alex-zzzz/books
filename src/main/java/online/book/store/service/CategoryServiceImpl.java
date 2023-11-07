@@ -5,10 +5,8 @@ import lombok.RequiredArgsConstructor;
 import online.book.store.dto.CategoryRequestDto;
 import online.book.store.dto.CategoryResponseDto;
 import online.book.store.exception.EntityNotFoundException;
-import online.book.store.mapper.BookMapper;
 import online.book.store.mapper.CategoryMapper;
 import online.book.store.model.Category;
-import online.book.store.repository.BookRepository;
 import online.book.store.repository.CategoryRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -52,8 +50,6 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapper.toDto(categoryRepository.save(category));
     }
 
-
-
     @Override
     public void deleteById(Long id) {
         if (!categoryRepository.existsById(id)) {
@@ -64,3 +60,4 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.deleteById(id);
     }
 }
+

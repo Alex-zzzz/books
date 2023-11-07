@@ -4,11 +4,9 @@ import lombok.RequiredArgsConstructor;
 import online.book.store.dto.UserRegistrationRequestDto;
 import online.book.store.dto.UserResponseDto;
 import online.book.store.exception.RegistrationException;
-import online.book.store.mapper.CategoryMapper;
 import online.book.store.mapper.UserMapper;
 import online.book.store.model.User;
 import online.book.store.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 

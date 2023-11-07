@@ -15,7 +15,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 @Configuration
 @PropertySource("classpath:application.properties")
 @ComponentScan(basePackages = "online.book.store")
-@SpringBootApplication(scanBasePackages={"online.book.store","online.book.store.mapper"})
+@SpringBootApplication(scanBasePackages = {"online.book.store","online.book.store.mapper"})
 public class AppConfig {
     private Environment environment;
 
@@ -46,5 +46,4 @@ public class AppConfig {
         localSessionFactoryBean.setPackagesToScan("online.book.store");
         return localSessionFactoryBean;
     }
-
 }
