@@ -3,21 +3,17 @@ package online.book.store.service;
 import java.util.List;
 import online.book.store.dto.BookDto;
 import online.book.store.dto.CreateBookRequestDto;
-import online.book.store.exception.EntityNotFoundException;
-import online.book.store.model.Book;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
-@Service
 public interface BookService {
-    BookDto save(CreateBookRequestDto requestDto);
+    BookDto save(CreateBookRequestDto book);
 
-    List<BookDto> findAll(Pageable pageable);
+    BookDto getBookById(Long id);
 
-    Book getBookById(Long id) throws EntityNotFoundException;
+    List<BookDto> getAll(Pageable pageable);
 
-    BookDto updateBook(Long id, CreateBookRequestDto bookDto);
+    BookDto updateBookById(Long id, CreateBookRequestDto updateDto);
 
-    void delete(@PathVariable Long id) throws EntityNotFoundException;
+    void deleteBookById(Long id);
+
 }

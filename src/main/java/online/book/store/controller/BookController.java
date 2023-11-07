@@ -1,14 +1,12 @@
 package online.book.store.controller;
 
+import java.util.List;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import online.book.store.dto.BookDto;
 import online.book.store.dto.CreateBookRequestDto;
-import online.book.store.exception.EntityNotFoundException;
-import online.book.store.model.Book;
 import online.book.store.service.BookService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -23,49 +21,50 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Book management", description = "Endpoints of managing books")
+@Tag(name = "Book management", description = "Endpoints for managing books")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/books")
+@RequestMapping(value = "/books")
 public class BookController {
     private final BookService bookService;
 
-    @PreAuthorize("hasRole('USER')")
     @GetMapping
-    @Operation(summary = "Get all books", description = "Get all available books from DB")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @Operation(summary = "Get all books", description = "Get a list of all books")
     public List<BookDto> getAll(Pageable pageable) {
-        return bookService.findAll(pageable);
+        return bookService.getAll(pageable);
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping(value = "/{id}")
-    @Operation(summary = "Get book by ID", description = "Get book by ID from DB")
-    public Book getBookById(@PathVariable Long id) throws EntityNotFoundException {
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @Operation(summary = "Get book by id", description = "Get book by id")
+    public BookDto getBookById(@PathVariable Long id) {
         return bookService.getBookById(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a new book", description = "Create a new book")
     public BookDto createBook(@RequestBody @Valid CreateBookRequestDto bookDto) {
         return bookService.save(bookDto);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Update book by ID", description = "Update book by specified ID")
-    public BookDto updateBookById(@PathVariable Long id,
-                                  @RequestBody @Valid CreateBookRequestDto bookDto) {
-        return bookService.updateBook(id, bookDto);
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Delete book by id", description = "Delete book by id")
+    public void deleteBookById(@PathVariable Long id) {
+        bookService.deleteBookById(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Delete book by ID", description = "Delete book by specified ID in DB")
-    public void delete(@PathVariable Long id) throws EntityNotFoundException {
-        bookService.delete(id);
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Update book by id", description = "Update book by id")
+    public BookDto updateBookById(@PathVariable Long id,
+                                  @RequestBody CreateBookRequestDto requestDto) {
+        return bookService.updateBookById(id, requestDto);
     }
+
 }

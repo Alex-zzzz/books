@@ -7,46 +7,69 @@ import online.book.store.dto.CreateBookRequestDto;
 import online.book.store.exception.EntityNotFoundException;
 import online.book.store.mapper.BookMapper;
 import online.book.store.model.Book;
+import online.book.store.model.Category;
 import online.book.store.repository.BookRepository;
+import online.book.store.repository.CategoryRepository;
 import online.book.store.service.BookService;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
 public class BookServiceImpl implements BookService {
-
-    private final BookMapper bookMapper;
     private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
+    private final CategoryRepository categoryRepository;
 
     @Override
-    public BookDto save(CreateBookRequestDto requestDto) {
-        Book book = bookMapper.toModel(requestDto);
+    public BookDto save(CreateBookRequestDto request) {
+        Book book = bookMapper.toModel(request);
+        book.setCategories(getCategoriesByIds(request.getCategoriesIds()));
         return bookMapper.toDto(bookRepository.save(book));
     }
 
     @Override
-    public List<BookDto> findAll(Pageable pageable) {
+    public BookDto getBookById(Long id) {
+        return bookMapper.toDto(bookRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Can't get book by id: " + id)));
+    }
+
+    @Override
+    public List<BookDto> getAll(Pageable pageable) {
         return bookRepository.findAll(pageable).stream()
                 .map(bookMapper::toDto)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Book getBookById(Long id) throws EntityNotFoundException {
-        return bookRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Can`t find book by id: " + id));
-    }
+    public BookDto updateBookById(Long id, CreateBookRequestDto updateDto) {
+        if (bookRepository.findById(id).isEmpty()) {
+            throw new EntityNotFoundException("Can't find book by id: " + id);
+        }
 
-    @Override
-    public BookDto updateBook(Long id, CreateBookRequestDto requestDto) {
-        Book book = bookMapper.toModel(requestDto);
+        Set<Category> categoriesByIds = getCategoriesByIds(updateDto.getCategoriesIds());
+        Book book = bookMapper.toModel(updateDto);
         book.setId(id);
+        book.setCategories(categoriesByIds);
         return bookMapper.toDto(bookRepository.save(book));
     }
 
     @Override
-    public void delete(Long id) throws EntityNotFoundException {
-        bookRepository.delete(getBookById(id));
+    public void deleteBookById(Long id) {
+        bookRepository.deleteById(id);
+    }
+
+    private Set<Category> getCategoriesByIds(List<Long> ids) {
+        if (ids.isEmpty()) {
+            throw new EntityNotFoundException("Can't find categories");
+        }
+
+        return ids.stream()
+                .map(categoryRepository::findById)
+                .flatMap(Optional::stream)
+                .collect(Collectors.toSet());
     }
 }
