@@ -22,7 +22,7 @@ public class JwtUtil {
         secret = Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generatesToken(String name) {
+    public String generateToken(String name) {
         return Jwts.builder()
                 .setSubject(name)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
