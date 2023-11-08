@@ -18,6 +18,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    private static final String BEARER_NAME = "Bearer ";
+    private static final int TOKEN_START_INDEX = 7;
+
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
 
@@ -27,21 +30,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
         String token = getToken(request);
+
         if (token != null && jwtUtil.isValidToken(token)) {
-            String username = jwtUtil.getUsername(token);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            String userName = jwtUtil.getUserName(token);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
             Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities()
+                    userDetails,
+                    userDetails.isCredentialsNonExpired(),
+                    userDetails.getAuthorities()
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 
     private String getToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.endsWith("Bearer ")) {
-            return bearerToken.substring(7);
+
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_NAME)) {
+            return bearerToken.substring(TOKEN_START_INDEX);
         }
         return null;
     }

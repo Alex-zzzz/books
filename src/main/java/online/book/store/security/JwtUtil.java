@@ -1,7 +1,6 @@
 package online.book.store.security;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -14,20 +13,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtUtil {
-
-    private Key secret;
+    private final Key secret;
 
     @Value("${jwt.expiration}")
-    private long expiration;
+    private Long expiration;
 
     public JwtUtil(@Value("${jwt.secret}") String secretString) {
         secret = Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(String username) {
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + username);
+    public String generateToken(String name) {
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(name)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(secret)
@@ -36,26 +33,26 @@ public class JwtUtil {
 
     public boolean isValidToken(String token) {
         try {
-            Jws<Claims> claimsJws = Jwts.parserBuilder()
+            Claims body = Jwts.parserBuilder()
                     .setSigningKey(secret)
                     .build()
-                    .parseClaimsJws(token);
-            return !claimsJws.getBody().getExpiration().before(new Date());
+                    .parseClaimsJws(token)
+                    .getBody();
+            return !body.getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
             throw new JwtException("Expired or invalid JWT token");
         }
     }
 
-    public String getUsername(String token) {
+    public String getUserName(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
-    private <T> T getClaimFromToken(String token, Function<Claims, T> claimsTResolver) {
-        final Claims claims = Jwts.parserBuilder()
+    private <T> T getClaimFromToken(String token, Function<Claims, T> disassembleClaim) {
+        return disassembleClaim.apply(Jwts.parserBuilder()
                 .setSigningKey(secret)
                 .build()
                 .parseClaimsJws(token)
-                .getBody();
-        return claimsTResolver.apply(claims);
+                .getBody());
     }
 }
