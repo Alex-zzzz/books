@@ -9,11 +9,22 @@ import org.springframework.stereotype.Component;
 public class UserMapperImpl implements UserMapper {
     @Override
     public UserResponseDto toDto(User user) {
-        return null;
+        UserResponseDto userResponseDto = new UserResponseDto();
+        userResponseDto.setId(user.getId());
+        userResponseDto.setPassword(user.getPassword());
+        userResponseDto.setLastName(userResponseDto.getLastName());
+        userResponseDto.setFirstName(userResponseDto.getFirstName());
+        userResponseDto.setEmail(user.getEmail());
+        return userResponseDto;
     }
 
     @Override
     public User toModel(UserRegistrationRequestDto userRequestDto) {
-        return null;
+        User user = new User();
+        user.setLastName(userRequestDto.getLastName());
+        user.setEmail(userRequestDto.getEmail());
+        user.setPassword(userRequestDto.getPassword());
+        user.setFirstName(userRequestDto.getFirstName());
+        return user;
     }
 }
