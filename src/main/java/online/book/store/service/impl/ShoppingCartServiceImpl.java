@@ -1,7 +1,6 @@
-package online.book.store.service;
+package online.book.store.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import online.book.store.UserService;
 import online.book.store.dto.CartItemRequestDto;
 import online.book.store.dto.ShoppingCartResponseDto;
 import online.book.store.exception.EntityNotFoundException;
@@ -11,6 +10,9 @@ import online.book.store.model.ShoppingCart;
 import online.book.store.model.User;
 import online.book.store.repository.CartItemRepository;
 import online.book.store.repository.ShoppingCartRepository;
+import online.book.store.service.CartItemService;
+import online.book.store.service.ShoppingCartService;
+import online.book.store.service.UserService;
 import org.springframework.stereotype.Service;
 
 @Service

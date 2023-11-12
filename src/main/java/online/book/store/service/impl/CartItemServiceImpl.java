@@ -1,4 +1,4 @@
-package online.book.store.service;
+package online.book.store.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import online.book.store.dto.CartItemRequestDto;
@@ -7,6 +7,7 @@ import online.book.store.model.Book;
 import online.book.store.model.CartItem;
 import online.book.store.repository.BookRepository;
 import online.book.store.repository.CartItemRepository;
+import online.book.store.service.CartItemService;
 import org.springframework.stereotype.Service;
 
 @Service

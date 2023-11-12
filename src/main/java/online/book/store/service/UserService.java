@@ -1,4 +1,4 @@
-package online.book.store;
+package online.book.store.service;
 
 import online.book.store.dto.UserRegistrationRequestDto;
 import online.book.store.dto.UserResponseDto;

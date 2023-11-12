@@ -1,4 +1,4 @@
-package online.book.store;
+package online.book.store.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import online.book.store.dto.UserRegistrationRequestDto;
@@ -8,6 +8,7 @@ import online.book.store.exception.RegistrationException;
 import online.book.store.mapper.UserMapper;
 import online.book.store.model.User;
 import online.book.store.repository.UserRepository;
+import online.book.store.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;

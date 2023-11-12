@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import online.book.store.dto.BookDtoWithoutCategoryIds;
 import online.book.store.dto.CategoryRequestDto;
 import online.book.store.dto.CategoryResponseDto;
 import online.book.store.service.CategoryService;
@@ -66,5 +67,14 @@ public class CategoryController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable Long id) {
         categoryService.deleteById(id);
+    }
+
+    @GetMapping("/{id}/books")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @Operation(summary = "Get all books by category id",
+            description = "Get all books by category id")
+    @ResponseStatus(HttpStatus.OK)
+    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(@PathVariable Long id) {
+        return categoryService.getBooksByCategoryId(id);
     }
 }
