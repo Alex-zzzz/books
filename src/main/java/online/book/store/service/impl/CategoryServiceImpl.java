@@ -1,13 +1,17 @@
-package online.book.store.service;
+package online.book.store.service.impl;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import online.book.store.dto.BookDtoWithoutCategoryIds;
 import online.book.store.dto.CategoryRequestDto;
 import online.book.store.dto.CategoryResponseDto;
 import online.book.store.exception.EntityNotFoundException;
+import online.book.store.mapper.BookMapper;
 import online.book.store.mapper.CategoryMapper;
 import online.book.store.model.Category;
+import online.book.store.repository.BookRepository;
 import online.book.store.repository.CategoryRepository;
+import online.book.store.service.CategoryService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +20,8 @@ import org.springframework.stereotype.Service;
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
+    private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
 
     @Override
     public CategoryResponseDto save(CategoryRequestDto request) {
@@ -51,6 +57,17 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(Long id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new EntityNotFoundException("Can't find category by id: " + id);
+        }
+
+        return bookRepository.findAllByCategoriesId(id).stream()
+                .map(bookMapper::toDtoWithoutCategories)
+                .toList();
+    }
+
+    @Override
     public void deleteById(Long id) {
         if (!categoryRepository.existsById(id)) {
             throw new EntityNotFoundException(
@@ -60,4 +77,3 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.deleteById(id);
     }
 }
-

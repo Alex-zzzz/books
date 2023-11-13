@@ -2,6 +2,7 @@ package online.book.store.service;
 
 import java.util.List;
 import online.book.store.dto.BookDto;
+import online.book.store.dto.BookSearchParametersDto;
 import online.book.store.dto.CreateBookRequestDto;
 import org.springframework.data.domain.Pageable;
 
@@ -16,4 +17,5 @@ public interface BookService {
 
     void deleteBookById(Long id);
 
+    List<BookDto> searchBooks(BookSearchParametersDto parametersDto, Pageable pageable);
 }
