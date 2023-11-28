@@ -83,16 +83,13 @@ class CategoryServiceTest {
         List<CategoryResponseDto> categoryRequestDtos = categoryService.getAll(pageable);
         assertThat(categoryRequestDtos).hasSize(1);
         assertThat(categoryRequestDtos.get(0)).isEqualTo(categoryResponseDto);
-
     }
 
     @Test
     void searchCategory_WithExistingId() {
-
         Category category = new Category();
         category.setName("test_name");
         category.setId(1L);
-
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
         Category categoryById = categoryRepository.findById(1L).get();
         String actual = category.getName();
