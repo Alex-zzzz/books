@@ -20,7 +20,7 @@ class BookRepositoryTest {
     void findAll() {
         Book book = new Book();
         book.setTitle("title");
-        book.setIsbn("isbn5");
+        book.setIsbn("isbn6");
         book.setAuthor("author");
         book.setPrice(BigDecimal.valueOf(100));
         bookRepository.save(book);

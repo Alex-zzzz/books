@@ -127,7 +127,6 @@ class BookControllerTest {
         book2.setAuthor("author1");
         book2.setIsbn("isbn1");
         book2.setPrice(BigDecimal.valueOf(100));
-
         bookRepository.save(book1);
         bookRepository.save(book2);
     }

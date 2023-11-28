@@ -102,10 +102,8 @@ class BookServiceTest {
         book.setPrice(BigDecimal.valueOf(100));
         List<Long> list = new ArrayList<>();
         list.add(1L);
-
         BookDto bookDto = new BookDto(book.getId(),book.getTitle(),"author","isbn",
                 book.getPrice(),"","",list);
-
         Pageable pageable = PageRequest.of(0,10);
         List<Book> books = List.of(book);
         Page<Book> bookPage = new PageImpl<>(books,pageable,books.size());
